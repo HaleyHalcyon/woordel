@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <script type="text/javascript" src="/js/game.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <title>WOORDEL – een dagelĳks woordspelletje (mit de lange Ĳ)</title>
+    <meta name="description" content="Zes beurten om het woord te gokken. Elke dag een nieuwe puzzel.">
+  </head>
+  <body>
+    <noscript>Het spĳt me; Deze pagina werkt alleen met Javascript ingeschakeld.</noscript>
+    <div id="game" style="display: none;">
+      <div id="toolbar">
+        <button type="button" aria-label="Hoe speel je dit spel?">?</button>
+        <div id="title">Woordel</div>
+        <button type="button" aria-label="Opties">···</button>
+      </div>
+      <div id="board">
+        <div class="row">
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+        </div>
+        <div class="row">
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+        </div>
+        <div class="row">
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+        </div>
+        <div class="row">
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+        </div>
+        <div class="row">
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+        </div>
+        <div class="row">
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+          <div class="letter"></div>
+        </div>
+      </div>
+      <div id="keyboard">
+        <div class="row">
+          <button type="button" aria-label="Q voor Quinten">Q</button>
+          <button type="button" aria-label="W voor Willem">W</button>
+          <button type="button" aria-label="E voor Eduard">E</button>
+          <button type="button" aria-label="R voor Richard">R</button>
+          <button type="button" aria-label="T voor Theodor">T</button>
+          <button type="button" aria-label="Ypsilon">Y</button>
+          <button type="button" aria-label="U voor Utrecht">U</button>
+          <button type="button" aria-label="I voor Izaak">I</button>
+          <button type="button" aria-label="O voor Otto">O</button>
+          <button type="button" aria-label="P voor Pieter">P</button>
+        </div><div class="row">
+          <button type="button" aria-label="A voor Anna">A</button>
+          <button type="button" aria-label="S voor Simon">S</button>
+          <button type="button" aria-label="D voor Dirk">D</button>
+          <button type="button" aria-label="F voor Ferdinand">F</button>
+          <button type="button" aria-label="G voor Gerard">G</button>
+          <button type="button" aria-label="H voor Hendrik">H</button>
+          <button type="button" aria-label="J voor Johan">J</button>
+          <button type="button" aria-label="K voor Karel">K</button>
+          <button type="button" aria-label="L voor Lodewĳk">L</button>
+          <button type="button" aria-label="Ĳ voor Ĳmuiden">Ĳ</button>
+        </div><div class="row">
+          <button type="button" aria-label="Z voor Zaandam">Z</button>
+          <button type="button" aria-label="X voor Xanthippe">X</button>
+          <button type="button" aria-label="C voor Cornelis">C</button>
+          <button type="button" aria-label="V voor Victor">V</button>
+          <button type="button" aria-label="B voor Bernard">B</button>
+          <button type="button" aria-label="N voor Nico">N</button>
+          <button type="button" aria-label="M voor Maria">M</button>
+          <button type="button" aria-label="Één letter verwĳderen">⌫</button>
+          <button type="button" aria-label="Het woord raden">✔</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
