@@ -42,7 +42,7 @@ export class GameState {
           key = key.toUpperCase();
           if (this.ALPHABET.includes(key)) {
             this.currentGuess = this.currentGuess + "Ĳ";
-            this.updateRow(this.usedGuesses.size);
+            this.updateRow(this.usedGuesses.length);
             return null;
           }
           return Error("not in alphabet");
