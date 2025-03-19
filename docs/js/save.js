@@ -57,9 +57,9 @@ export function updateStats(win, guessCount) {
   }
   let guessDist = JSON.parse(window.localStorage.getItem(PREFIX + "guessDist") || "[0,0,0,0,0,0,0]");
   if (win) {
-    guessDist[guessCount - 1]++;
+    guessDist[guessCount]++;
   } else {
-    guessDist[6]++;
+    guessDist[0]++;
   }
   window.localStorage.setItem(PREFIX + "plays", plays);
   window.localStorage.setItem(PREFIX + "wins", wins);
