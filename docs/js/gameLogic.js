@@ -52,6 +52,7 @@ export class GameState {
   }
 
   updateRow(row) {
+    console.debug(this.board, this.keyboard);
     for (let c = 0; c < this.CHAR_COUNT; c++) {
       let tile = this.board.children[row].children[c];
       tile.classList.remove("hit", "graze", "miss");
