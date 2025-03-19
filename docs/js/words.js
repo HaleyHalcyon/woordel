@@ -1,5 +1,6 @@
 // Functions related to the dictionary, but not its contents (e.g. checking validity and choosing the daily word).
-import {words, solutions} from "./dictionary.js"
+import {words} from "./dictionary.js"
+import {solutions} from "./solutions.js"
 
 function triple32(x) {
     x ^= x >> 17n;
