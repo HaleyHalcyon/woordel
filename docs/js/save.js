@@ -1,7 +1,7 @@
 const PREFIX = "WDL_";
 // just do everything in local timezone i can’t be assed
 let now = new Date();
-let daysSinceUnixEpoch = new BigInt(
+let daysSinceUnixEpoch = BigInt(
   Math.floor(now - new Date(0)) / (new Date(1970, 0, 2) - new Date(1970, 0, 1))
 );
 
