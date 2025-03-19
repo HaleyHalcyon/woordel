@@ -23,7 +23,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.body.addEventListener("keypress", e => {
     gameState.hitKey(e.key);
   });
-
+  Array.from(document.querySelectorAll("#keyboard button")).forEach(el => {
+    let key = (
+      el.innerText === "⌫" ? "Backspace" :
+      el.innerText === "✔" ? "Enter" : el.innerText
+    );
+    el.addEventListener("click", () => {
+      gameState.hitKey(key);
+    });
+  });
   
   document.getElementById("btnInstructions").addEventListener(
     "click", () => {
