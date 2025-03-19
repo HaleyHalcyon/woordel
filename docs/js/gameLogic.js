@@ -41,7 +41,7 @@ export class GameState {
         if (this.currentGuess.length < this.CHAR_COUNT) {
           key = key.toUpperCase();
           if (this.ALPHABET.includes(key)) {
-            this.currentGuess = this.currentGuess + "Ĳ";
+            this.currentGuess = this.currentGuess + key;
             this.updateRow(this.usedGuesses.length);
             return null;
           }
