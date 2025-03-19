@@ -218,7 +218,7 @@ export class GameState {
         if (guess[i] === secret[j]) {
           clues[i] = 1;
           guess[i] = null;
-          secret[i] = null;
+          secret[j] = null;
           continue;
         }
       }
