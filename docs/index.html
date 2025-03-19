@@ -45,15 +45,30 @@
         <button>sluiten</button>
       </form>
     </dialog>
+    <dialog id="settings">
+      <h3>
+        <span class="inlineTile">O</span><span class="inlineTile">P</span><span class="inlineTile">T</span><span class="inlineTile">I</span><span class="inlineTile">E</span><span class="inlineTile">S</span>
+      </h3>
+      <p>Niets is nog te veranderen...</p>
+      <h3>
+        <span class="inlineTile">C</span><span class="inlineTile">R</span><span class="inlineTile">E</span><span class="inlineTile">D</span><span class="inlineTile">I</span><span class="inlineTile">T</span><span class="inlineTile">S</span>
+      </h3>
+      <ul>
+        <li>gecodeerd voor <a href="https://2gd4.me">Haley Halcyon</a> (<a href="https://github.com/HaleyHalcyon/woordel">de broncode zien</a>)</li>
+        <li>het originele spel “Wordle” door Josh Wardle</li>
+        <li>Nederlandse bewerking gebaseerd op het tv-programma “Lingo”</li>
+        <li>woordenlĳst van OpenTaal</li>
+      </ul>
+    </dialog>
     <div id="game" style="display: none;">
       <div id="toolbar">
-        <button type="button" aria-label="Hoe speel je dit spel?">?</button>
+        <button type="button" id="btnInstruction" aria-label="Hoe speel je dit spel?">?</button>
         <div id="title">
           <span class="dontBreakWord"><span class="inlineTile">W</span><span class="inlineTile">E</span><span class="inlineTile">L</span><span class="inlineTile">K</span><span class="inlineTile">O</span><span class="inlineTile">M</span></span>
           <span class="dontBreakWord"><span class="inlineTile">B</span><span class="inlineTile">Ĳ</span></span>
           <span class="dontBreakWord"><span class="inlineTile">W</span><span class="inlineTile">O</span><span class="inlineTile">O</span><span class="inlineTile">R</span><span class="inlineTile">D</span><span class="inlineTile">E</span><span class="inlineTile">L</span></span>
         </div>
-        <button type="button" aria-label="Opties">…</button>
+        <button type="button" id="btnSettings" aria-label="Opties">…</button>
       </div>
       <div id="board">
         <div class="row">
