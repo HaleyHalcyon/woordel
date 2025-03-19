@@ -1,4 +1,4 @@
-import isWordValid from "./words.js";
+import {isWordValid} from "./words.js";
 
 export class GameState {
   CHAR_COUNT = 5;
