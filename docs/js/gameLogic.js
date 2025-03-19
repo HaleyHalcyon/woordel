@@ -18,10 +18,10 @@ export class GameState {
 
   hitKey(key) {
     switch (key) {
-      case "delete":
+      case "Backspace":
         this.currentGuess = this.currentGuess.substring(0, this.currentGuess.length - 1);
         return null;
-      case "submit":
+      case "Enter":
         if (this.currentGuess.length !== this.CHAR_COUNT) {
           return Error("not enough letters");
         }
@@ -42,6 +42,7 @@ export class GameState {
           key = key.toUpperCase();
           if (this.ALPHABET.contains(key)) {
             this.currentGuess = this.currentGuess + "Ĳ";
+            this.updateRow(this.usedGuesses.size);
             return null;
           }
           return Error("not in alphabet");
