@@ -122,16 +122,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   document.getElementById("btnInstructions").addEventListener(
     "click", (event) => {
-      document.getElementById("instructions").scrollTo(0, 0);
       document.getElementById("instructions").showModal();
+      document.getElementById("instructions").scrollTo(0, 0);
       event.preventDefault();
       event.stopImmediatePropagation();
     }
   );
   document.getElementById("btnSettings").addEventListener(
     "click", (event) => {
-      document.getElementById("settings").scrollTo(0, 0);
       document.getElementById("settings").showModal();
+      document.getElementById("settings").scrollTo(0, 0);
       event.preventDefault();
       event.stopImmediatePropagation();
     }
