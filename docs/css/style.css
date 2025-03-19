@@ -107,7 +107,17 @@ dialog {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  background: var(--color-bg);
   gap: 4px;
+}
+
+#toolbar button {
+  flex: 0 0 auto;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  line-height: 1.5rem;
 }
 
 #title {
