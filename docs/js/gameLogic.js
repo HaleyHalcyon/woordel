@@ -72,7 +72,7 @@ export class GameState {
     }
   }
 
-  loadAutoSave(autosave) {
+  loadAutosave(autosave) {
     this.secret = autosave.secret;
     this.usedGuesses = autosave.usedGuesses;
     this.clues = Array.from(usedGuesses, guess => this.generateClues(guess));
