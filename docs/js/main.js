@@ -1,6 +1,6 @@
 import * as save from "./save.js";
 import {chooseDailyWord} from "./words.js";
-import {GameState} from "./game.js";
+import {GameState} from "./gameLogic.js";
 document.addEventListener("DOMContentLoaded", async () => {
   // todo: set everything up
   const gameState = new GameState(
