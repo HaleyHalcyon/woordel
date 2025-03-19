@@ -273,6 +273,26 @@ dialog[open] {
   font-size: 1.25rem;
 }
 
+.keyRow button.hit {
+  border-color: var(--color-hit);
+  color: var(--color-hit);
+  box-shadow: 1px 2px 0px var(--color-hit);
+  font-weight: bold;
+}
+
+.keyRow button.graze {
+  border-color: var(--color-graze);
+  color: var(--color-graze);
+  box-shadow: 1px 2px 0px var(--color-graze);
+  font-weight: bold;
+}
+
+.keyRow button.miss {
+  border-color: var(--color-miss);
+  color: var(--color-miss);
+  box-shadow: 1px 2px 0px var(--color-miss);
+}
+
 p {
   line-height: 1.6;
 }

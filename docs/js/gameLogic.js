@@ -1,5 +1,5 @@
 import { isWordValid } from "./words.js";
-import { saveAutosave } from "./save.js";
+import { saveAutosave, updateStats } from "./save.js";
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -94,10 +94,30 @@ export class GameState {
   async updateRowWithAnimation(row) {
     this.animating = true;
     saveAutosave(this.secret, this.usedGuesses);
+    if (this.usedGuesses.at(row) === this.secret || this.usedGuesses.length === this.MAX_TURNS) {
+      updateStats(this.usedGuesses.at(row) === this.secret, this.usedGuesses.length);
+    }
     for (let c = 0; c < this.CHAR_COUNT; c++) {
       let tile = this.board.children[row].children[c];
       tile.classList.remove("filled");
       tile.classList.add(["miss", "graze", "hit"][this.clues[row].at(c)]);
+      let letter = this.usedGuesses.at(-1).at(c);
+      let key = this.kb.querySelector("button[data-key=" + letter + "]");
+      switch (this.lettersGuessed[letter]) {
+        case 2:
+          key.classList.remove("graze");
+          key.classList.add("hit");
+          break;
+        case 1:
+          if (key.classList.has("hit")) break;
+          key.classList.add("graze");
+          break;
+        case 0:
+          key.classList.add("miss");
+          break;
+        default:
+          console.error("updateRowWithAnimation unexpected letterGuessed value");
+      }
       await delay(150);
     }
     if (this.usedGuesses.at(row) === this.secret) {
@@ -114,8 +134,31 @@ export class GameState {
     this.clues = Array.from(this.usedGuesses, (guess) =>
       this.generateClues(guess)
     );
-    // this.bestGuess is already donoe for us above
-    // [TODO] this.lettersGuessed =
+    // this.bestGuess is already done for us above
+    console.log("lettersGuessed", this.lettersGuessed);
+    for (let i = 0; i < this.clues.length; i++) {
+      for (let j = 0; j < this.CHAR_COUNT; j++) {
+        if (this.clues[i][j] > this.lettersGuessed[this.usedGuesses[i][j]]) {
+          this.lettersGuessed[this.usedGuesses[i][j]] = this.clues[i][j];
+        }
+      }
+    }
+    for (let letter of this.ALPHABET) {
+      let key = this.kb.querySelector("button[data-key=" + letter + "]");
+      switch (this.lettersGuessed[letter]) {
+        case 2:
+          key.classList.remove("graze");
+          key.classList.add("hit");
+          break;
+        case 1:
+          if (key.classList.has("hit")) break;
+          key.classList.add("graze");
+          break;
+        case 0:
+          key.classList.add("miss");
+          break;
+      }
+    }
     this.currentGuess = "";
     for (let i = 0; i < this.MAX_TURNS; i++) {
       this.updateRow(i);

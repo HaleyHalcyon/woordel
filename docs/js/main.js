@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     m.querySelectorAll("h3 .inlineTile").forEach((v, k) => {
       v.innerText = gameState.secret.at(k);
     });
-    const sharable = gameState.exportSharable(dayNumber - dayZero);
+    const sharable = gameState.exportSharable(dayNumber - dayZero) + "\n" + window.location;
     console.log(sharable);
     m.querySelector("textarea").value = sharable;
     m.querySelector("#btnShare").addEventListener("click", async () => {
@@ -31,6 +31,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert("Sorry, er is iets misgegaan bĳ het kopiëren van de resultaten naar het klembord.");
       }
     });
+    // stats
+    const stats = save.getStats();
+    m.querySelector("#playCount").innerText = `${stats.plays}×`
+    m.querySelector("#winRate").innerText = `${((stats.wins / stats.plays) * 100).toPrecision(3)}`
+    m.querySelector("#streak").innerText = `${stats.streak}`
+    m.querySelector("#maxStreak").innerText = `${stats.maxStreak}`
+    let maxMeter = stats.guessDist.reduce((acc, now) => Math.max(acc, now), 1);
+    for (let i = 0; i < 7; i++) {
+      // the offsets are pretty fucked up here
+      let meter = document.querySelector(`#scoreBar > :nth-child(${i + 2}) .barBG`);
+      meter.querySelector(".barFG").style.flexGrow = stats.guessDist[i === 6 ? 0 : i + 1];
+      meter.querySelector(".barSpacer").style.flexGrow = maxMeter - stats.guessDist[i === 6 ? 0 : i + 1];
+    }
+    // next word
     const nextWordleTimer = () => {
       const tomorrow = new Date();
       tomorrow.setHours(0);
@@ -99,10 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return false;
   });
   Array.from(document.querySelectorAll("#keyboard button")).forEach(el => {
-    let key = (
-      el.innerText === "⌫" ? "Backspace" :
-      el.innerText === "✔" ? "Enter" : el.innerText
-    );
+    let key = el.dataset["key"];
     el.addEventListener("click", async () => {
       afterHitKey(await gameState.hitKey(key));
     });
