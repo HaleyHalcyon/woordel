@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       setTimeout(nextWordleTimer, timeTillTomorrow.getMilliseconds() < 10 ? 1000 : timeTillTomorrow.getMilliseconds());
     }
     nextWordleTimer();
+    m.scrollTo(0, 0);
     m.showModal();
   }
 
@@ -121,6 +122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   document.getElementById("btnInstructions").addEventListener(
     "click", (event) => {
+      document.getElementById("instructions").scrollTo(0, 0);
       document.getElementById("instructions").showModal();
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -128,6 +130,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
   document.getElementById("btnSettings").addEventListener(
     "click", (event) => {
+      document.getElementById("settings").scrollTo(0, 0);
       document.getElementById("settings").showModal();
       event.preventDefault();
       event.stopImmediatePropagation();
