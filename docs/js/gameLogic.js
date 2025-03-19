@@ -8,7 +8,7 @@ export class GameState {
     this.usedGuesses = [];
     this.bestGuess = Array.from(Array(this.CHAR_COUNT), _ => ".");
     this.lettersGuessed = Object.fromEntries(
-      ...Array.from(ALPHABET, v => [v, -1])
+      ...Array.from(this.ALPHABET, v => [v, -1])
     );
     this.clues = [];
     this.board = boardRef;
