@@ -1,4 +1,7 @@
-import {isWordValid} from "./words.js";
+import { isWordValid } from "./words.js";
+import { saveAutosave } from "./save.js";
+
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 export class GameState {
   CHAR_COUNT = 5;
@@ -6,112 +9,146 @@ export class GameState {
   ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZĲ";
   constructor(boardRef, keyboardRef) {
     this.usedGuesses = [];
-    this.bestGuess = Array.from(Array(this.CHAR_COUNT), _ => ".");
+    this.bestGuess = Array.from(Array(this.CHAR_COUNT), (_) => ".");
     this.lettersGuessed = Object.fromEntries(
-      Array.from(this.ALPHABET, v => [v, -1])
+      Array.from(this.ALPHABET, (v) => [v, -1])
     );
     this.clues = [];
     this.board = boardRef;
     this.kb = keyboardRef;
     this.currentGuess = "";
+    this.animating = false;
+    this.gameOver = false;
   }
 
-  hitKey(key) {
+  async hitKey(key) {
+    if (this.animating || this.gameOver) return null;
+    console.debug(key);
     switch (key) {
       case "Backspace":
-        this.currentGuess = this.currentGuess.substring(0, this.currentGuess.length - 1);
+        this.currentGuess = this.currentGuess.substring(
+          0,
+          this.currentGuess.length - 1
+        );
         this.updateRow(this.usedGuesses.length);
         return null;
       case "Enter":
         if (this.currentGuess.length !== this.CHAR_COUNT) {
-          return Error("not enough letters");
+          return Error("Het woord moet 5 letters zĳn.");
         }
-        const result = this.submitGuess();
+        const result = await this.submitGuess();
         if (result === null) {
-          return Error("invalid word");
+          return Error("Dat woord was niet gevonden.");
         }
-        this.updateRow(this.usedGuesses.length - 1);
-        this.updateRow(this.usedGuesses.length);
+        await this.updateRowWithAnimation(this.usedGuesses.length - 1);
         return result;
       case ";":
       case ":":
         if (this.currentGuess.length < this.CHAR_COUNT) {
           this.currentGuess = this.currentGuess + "Ĳ";
+          this.updateRow(this.usedGuesses.length);
           return null;
         }
-        return Error("too many letters");
+        return Error("Het woord moet 5 letters zĳn.");
       default:
-        if (this.currentGuess.length < this.CHAR_COUNT) {
-          key = key.toUpperCase();
-          if (this.ALPHABET.includes(key)) {
-            this.currentGuess = this.currentGuess + key;
-            this.updateRow(this.usedGuesses.length);
-            return null;
+        key = key.toUpperCase();
+        if (this.ALPHABET.includes(key)) {
+          if (this.currentGuess.length >= this.CHAR_COUNT) {
+            return Error("Het woord moet 5 letters zĳn.");
           }
-          return Error("not in alphabet");
+          this.currentGuess = this.currentGuess + key;
+          this.updateRow(this.usedGuesses.length);
+          return null;
         }
-        return Error("too many letters");
+        return null; //return Error("Dat is geen letter uit het Nederlandse alfabet.");
     }
   }
 
   updateRow(row) {
-    if (row >= this.MAX_TURNS) return;
+    if (row >= this.MAX_TURNS || this.gameOver) return;
     for (let c = 0; c < this.CHAR_COUNT; c++) {
       let tile = this.board.children[row].children[c];
       tile.classList.remove("hit", "graze", "miss", "filled");
       if (this.clues.length <= row) {
-        if (this.clues.length === row) {
+        if (
+          this.clues.length === row &&
+          this.usedGuesses.at(-1) !== this.secret
+        ) {
           if (c < this.currentGuess.length) {
             tile.innerText = this.currentGuess.at(c);
             tile.classList.add("filled");
           } else {
             tile.innerText = this.bestGuess.at(c);
           }
-          tile.classList.add("filled");
         } else {
           tile.innerText = "";
         }
       } else {
         tile.innerText = this.usedGuesses[row].at(c);
-        tile.classList.add(
-          [
-            "miss", "graze", "hit"
-          ][this.clues[row].at(c)]
-        );
+        tile.classList.add(["miss", "graze", "hit"][this.clues[row].at(c)]);
       }
     }
+  }
+
+  // Used to show the results of the last guess.
+  async updateRowWithAnimation(row) {
+    this.animating = true;
+    saveAutosave(this.secret, this.usedGuesses);
+    for (let c = 0; c < this.CHAR_COUNT; c++) {
+      let tile = this.board.children[row].children[c];
+      tile.classList.remove("filled");
+      tile.classList.add(["miss", "graze", "hit"][this.clues[row].at(c)]);
+      await delay(150);
+    }
+    if (this.usedGuesses.at(row) === this.secret) {
+      this.board.children[row].classList.add("answer");
+    }
+    this.updateRow(row + 1);
+    this.animating = false;
+    return;
   }
 
   loadAutosave(autosave) {
     this.secret = autosave.secret;
     this.usedGuesses = autosave.usedGuesses || [];
-    this.clues = Array.from(this.usedGuesses, guess => this.generateClues(guess));
-    // [TODO] this.bestGuess = 
-    // [TODO] this.lettersGuessed = 
+    this.clues = Array.from(this.usedGuesses, (guess) =>
+      this.generateClues(guess)
+    );
+    // this.bestGuess is already donoe for us above
+    // [TODO] this.lettersGuessed =
     this.currentGuess = "";
     for (let i = 0; i < this.MAX_TURNS; i++) {
       this.updateRow(i);
     }
     // [TODO] re-show endgame popup if game is over
+    this.gameOver = this.secret === this.usedGuesses.at(-1) || this.usedGuesses.length === this.MAX_TURNS;
+    return {
+      win: this.secret === this.usedGuesses.at(-1),
+      lose: this.usedGuesses.length === this.MAX_TURNS,
+    };
   }
 
-  submitGuess() {
+  async submitGuess() {
     if (!isWordValid(this.currentGuess)) {
       return null;
     }
     this.usedGuesses.push(this.currentGuess);
     let clues = this.generateClues(this.currentGuess);
+    this.clues.push(clues);
     if (this.currentGuess == this.secret) {
+      this.gameOver = true;
       return {
         clues,
         win: true,
         lose: false,
       };
     }
+    this.currentGuess = "";
+    this.gameOver = this.usedGuesses.length == this.MAX_TURNS;
     return {
       clues,
       win: false,
-      lose: this.usedGuesses.length == this.MAX_TURNS
+      lose: this.gameOver,
     };
   }
 
@@ -119,14 +156,12 @@ export class GameState {
     let guess = [...guessWord];
     let secret = [...this.secret];
     // find green letters
-    let clues = Array.from(secret, _ => 0);
+    let clues = Array.from(secret, (_) => 0);
     for (let i = 0; i < secret.length; i++) {
       if (guess[i] === secret[i]) {
         this.bestGuess[i] = secret[i];
-        if (
-          this.lettersGuessed[secret[i]] !== 2
-        ) {
-          this.lettersGuessed[secret[i]] = 2
+        if (this.lettersGuessed[secret[i]] !== 2) {
+          this.lettersGuessed[secret[i]] = 2;
         }
         clues[i] = 2;
         guess[i] = null;
@@ -134,9 +169,9 @@ export class GameState {
       }
     }
     // find yellow letters
-    for (let i = 0; i < secret.length - 1; i++) {
+    for (let i = 0; i < secret.length; i++) {
       if (guess[i] === null) continue;
-      for (let j = i + 1; j < secret.length; j++) {
+      for (let j = 0; j < secret.length; j++) {
         if (guess[i] === secret[j]) {
           clues[i] = 1;
           guess[i] = null;
@@ -152,6 +187,16 @@ export class GameState {
     return {
       secret: this.secret,
       usedGuesses: this.usedGuesses,
-    }
+    };
+  }
+
+  exportSharable(dayNumber) {
+    return `Woordle #${dayNumber}: ${
+      this.secret === this.usedGuesses.at(-1) ? this.usedGuesses.length : "×"
+    }/${this.MAX_TURNS}\n${Array.from(this.clues, (row) => {
+      return Array.from(row, (clue) => {
+        return ["⬛", "🟨", "🟩",][clue];
+      }).join("");
+    }).join("\n")}`;
   }
 }

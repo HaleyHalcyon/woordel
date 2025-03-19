@@ -2,9 +2,10 @@
   --color-hit: #099e42;
   --color-graze: #e1ae06;
   --color-miss: #747474;
-  --color-empty: #cccccc;
+  --color-empty: #ddd;
+  --color-filled: #bbb;
   --color-bg: #fff;
-  --color-bg-transparent: rgba(255,255,255,0.75);
+  --color-bg2: #eee;
   --color-fg: #000;
 
   --tile-size: min(12vw, 4rem);
@@ -15,12 +16,33 @@
   font-family: "Noto Sans Mono", monospace;
 }
 
-::backdrop {
-  position: fixed;
-  inset: 0;
-  visibility: visible;
-  background: var(--color-bg-transparent);
+dialog::backdrop {
+  transition: backdrop-all 300ms ease-in-out;
+  backdrop-filter: blur(0px);
+}
+
+dialog[open]::backdrop {
   backdrop-filter: blur(3px);
+}
+
+@keyframes correctWord {
+  from {
+    transform: rotate(0deg);
+    background-color: var(--color-hit);
+  }
+  25% {
+    background-color: cyan;
+  }
+  50% {
+    background-color: magenta;
+  }
+  75% {
+    background-color: yellow;
+  }
+  to {
+    transform: rotate(360deg);
+    background-color: var(--color-hit);
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -28,8 +50,10 @@
     --color-hit: #22d767;
     --color-graze: #e1ae06;
     --color-miss: #747474;
-    --color-empty: #444444;
+    --color-empty: #333;
+    --color-filled: #555;
     --color-bg: #000;
+    --color-bg2: #111;
     --color-fg: #fff;
   }
   ::backdrop {
@@ -55,23 +79,30 @@ button {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
-  box-shadow: 2px 2px 0px var(--color-fg);
+  box-shadow: 1px 2px 0px var(--color-fg);
 }
 
 button:active {
-  transform: translate(2px, 2px);
+  transform: translate(1px, 2px);
   box-shadow: none;
 }
 
 dialog {
   position: fixed;
+  z-index: 2;
   box-sizing: border-box;
   inset: 1rem;
   background: var(--color-bg);
   color: var(--color-fg);
   max-width: 36rem;
-  max-height: calc(100lvh - 2rem);
+  max-height: calc(100svh - 2rem);
   overflow-y: auto;
+  opacity: 0;
+  transition: opacity 250ms;
+}
+
+dialog[open] {
+  opacity: 1;
 }
 
 .dontBreakWord {
@@ -91,13 +122,35 @@ dialog {
   font-weight: 700;
 }
 
+.toast {
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  will-change: transform;
+  animation: 0.5s cubic-bezier(0.2, 0, 0.4, 1) normal forwards toastKeyframes, 0.8s 4.2s cubic-bezier(0, 0, 0.4, 1) reverse forwards toastKeyframes;
+  background-color: var(--color-bg2);
+  border: 1px solid var(--color-fg);
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+@keyframes toastKeyframes {
+  from {
+    transform: translate(-50%, -100%);
+  }
+  to {
+    transform: translate(-50%, 1rem);
+  }
+}
+
 #game {
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: stretch;
   width: 100vw;
-  height: 100lvh;
+  height: 100svh;
   gap: 8px;
 }
 
@@ -108,7 +161,7 @@ dialog {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background: var(--color-bg);
+  background: var(--color-bg2);
   gap: 4px;
 }
 
@@ -148,8 +201,13 @@ dialog {
   line-height: var(--tile-size);
   font-size: calc(var(--tile-size) * 0.6);
   background-color: var(--color-empty);
-  color: var(--color-fg);
+  color: var(--color-bg);
   font-weight: 700;
+}
+
+.row > .letter.filled {
+  background-color: var(--color-filled);
+  color: var(--color-fg);
 }
 
 .row > .letter.hit {
@@ -165,6 +223,26 @@ dialog {
 .row > .letter.miss {
   background-color: var(--color-miss);
   color: var(--color-bg);
+}
+
+.row.answer > .letter {
+  animation: cubic-bezier(0.4, 0, 0.25, 1) 500ms correctWord;
+}
+
+.row.answer > .letter:nth-child(2) {
+  animation-delay: 50ms;
+}
+
+.row.answer > .letter:nth-child(3) {
+  animation-delay: 100ms;
+}
+
+.row.answer > .letter:nth-child(4) {
+  animation-delay: 150ms;
+}
+
+.row.answer > .letter:nth-child(5) {
+  animation-delay: 200ms;
 }
 
 #keyboard {
@@ -197,4 +275,81 @@ dialog {
 
 p {
   line-height: 1.6;
+}
+
+#gameOver textarea {
+  background-color: var(--color-bg2);
+  border: 1px solid var(--color-fg);
+  font-family: inherit;
+  font-size: 0.75rem;
+  box-sizing: border-box;
+  height: auto;
+  min-height: fit-content;
+  color: var(--color-fg);
+}
+
+#playStats {
+  box-sizing: border-box;
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+#playStats th, #playStats td {
+  padding: 0 0.25rem;
+}
+
+#playStats th:nth-child(n+2), #playStats td:nth-child(n+2) {
+  border-left: 1px solid var(--color-fg);
+}
+
+#scoreBar {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+#scoreBar .header {
+  width: 100%;
+  text-align: center;
+  font-weight: 700;
+}
+
+#scoreBar div {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+#scoreBar div b {
+  flex: 0 0 auto;
+}
+
+
+#scoreBar .barBG {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+.barFG, .barSpacer {
+  flex: 1 1 0;
+}
+
+.barFG {
+  background-color: var(--color-hit);
+}
+
+#scoreBar > :last-child .barFG {
+  background-color: var(--color-filled);
+}
+
+.cols {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: stretch;
+  height: auto;
+  min-height: fit-content;
 }

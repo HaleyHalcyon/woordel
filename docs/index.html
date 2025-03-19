@@ -1,176 +1,295 @@
 <!DOCTYPE html>
 <html lang="nl">
-  <head>
-    <meta charset="UTF-8" />
-    <script type="module" src="./js/main.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css" />
 
-    <title>WOORDEL – een dagelĳks woordspelletje (met de lange Ĳ)</title>
-    <meta name="description" content="Zes beurten om het woord te gokken. Elke dag een nieuwe puzzel.">
-  </head>
-  <body>
-    <noscript style="display:flex;flex-direction:column;width:100vw;height:100svh;justify-content:center;align-items:center;">
-      <div class="row">
-        <div class="letter hit">S</div>
-        <div class="letter graze">O</div>
-        <div class="letter miss">R</div>
-        <div class="letter miss">R</div>
-        <div class="letter miss">Y</div>
-      </div>
-      <div style="max-width:25rem;">
-        Deze pagina werkt alleen met Javascript ingeschakeld.
-      </div>
-    </noscript>
-    <dialog id="instructions">
-      <h3>
-        <span class="inlineTile">I</span><span class="inlineTile">N</span><span class="inlineTile">S</span><span class="inlineTile">T</span><span class="inlineTile">R</span><span class="inlineTile">U</span><span class="inlineTile">C</span><span class="inlineTile">T</span><span class="inlineTile">I</span><span class="inlineTile">E</span><span class="inlineTile">S</span>
-      </h3>
-      <p>Raad het 5-letter <b>Woordel</b> in 6 keer.</p>
-      <p>Na elke gok zullen de kleuren van de vakjes aangeven hoe dichtbĳ je was.</p>
-      <hr>
-      <p>Stel bĳvorbeeld, dat je raadt dat het Woordel <span class="dontBreakWord">“<span class="inlineTile">K</span><span class="inlineTile">Ĳ</span><span class="inlineTile">K</span><span class="inlineTile">E</span><span class="inlineTile">N</span>”</span> is.</p>
-      <div class="row">
-        <div class="letter hit">K</div>
-        <div class="letter graze">Ĳ</div>
-        <div class="letter miss">K</div>
-        <div class="letter miss">E</div>
-        <div class="letter hit">N</div>
-      </div>
-      <p>Wat kun je hieruit afleiden?</p>
-      <br>
-      <p>De eerste letter, <span class="inlineTile">K</span>, is groen, wat betekent dat <b>de eerste letter van het Woordel <span class="inlineTile">K</span> is</b>. Hetzelfde geldt voor de laatste letter, <span class="inlineTile">N</span>, die aangeeft dat de laatste letter van het Woordel <span class="inlineTile">N</span> is.</p>
-      <p>De tweede <span class="inlineTile">K</span> en de <span class="inlineTile">E</span> zĳn grĳs. Dit betekent dat <b>het Woordel nergens een tweede <span class="inlineTile">K</span> of een <span class="inlineTile">E</span> bevat.</b></p>
-      <p>De tweede letter <span class="inlineTile">Ĳ</span> is geel, wat betekent dat <b>het Woordel een <span class="inlineTile">Ĳ</span> bevat, maar niet als tweede letter</b>.</p>
-      <br>
-      <p>In dit voorbeeld was het juiste Woordel <span class="dontBreakWord">“<span class="inlineTile">K</span><span class="inlineTile">O</span><span class="inlineTile">N</span><span class="inlineTile">Ĳ</span><span class="inlineTile">N</span>”!</span></p>
-      <div class="row">
-        <div class="letter hit">K</div>
-        <div class="letter hit">O</div>
-        <div class="letter hit">N</div>
-        <div class="letter hit">Ĳ</div>
-        <div class="letter hit">N</div>
-      </div>
-      <hr>
-      <form method="dialog">
-        <button>sluiten</button>
-      </form>
-    </dialog>
-    <dialog id="settings">
-      <h3>
-        <span class="inlineTile">O</span><span class="inlineTile">P</span><span class="inlineTile">T</span><span class="inlineTile">I</span><span class="inlineTile">E</span><span class="inlineTile">S</span>
-      </h3>
-      <p>Niets is nog te veranderen...</p>
-      <hr>
-      <h3>
-        <span class="inlineTile">C</span><span class="inlineTile">R</span><span class="inlineTile">E</span><span class="inlineTile">D</span><span class="inlineTile">I</span><span class="inlineTile">T</span><span class="inlineTile">S</span>
-      </h3>
-      <ul>
-        <li>gecodeerd voor <a href="https://2gd4.me">Haley Halcyon</a> (<a href="https://github.com/HaleyHalcyon/woordel">de broncode zien</a>)</li>
-        <li>het originele spel “Wordle” door Josh Wardle</li>
-        <li>Nederlandse bewerking gebaseerd op het tv-programma “Lingo”</li>
-        <li>woordenlĳst van OpenTaal</li>
-      </ul>
-      <hr>
-      <form method="dialog">
-        <button>sluiten</button>
-      </form>
-    </dialog>
-    <div id="game" style="display: none;">
-      <div id="toolbar">
-        <button type="button" id="btnInstructions" aria-label="Hoe speel je dit spel?">?</button>
-        <div id="title">
-          <span class="dontBreakWord"><span class="inlineTile">W</span><span class="inlineTile">E</span><span class="inlineTile">L</span><span class="inlineTile">K</span><span class="inlineTile">O</span><span class="inlineTile">M</span></span>
-          <span class="dontBreakWord"><span class="inlineTile">B</span><span class="inlineTile">Ĳ</span></span>
-          <span class="dontBreakWord"><span class="inlineTile">W</span><span class="inlineTile">O</span><span class="inlineTile">O</span><span class="inlineTile">R</span><span class="inlineTile">D</span><span class="inlineTile">E</span><span class="inlineTile">L</span></span>
-        </div>
-        <button type="button" id="btnSettings" aria-label="Opties">…</button>
-      </div>
-      <div id="board">
-        <div class="row">
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-        </div>
-        <div class="row">
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-        </div>
-        <div class="row">
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-        </div>
-        <div class="row">
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-        </div>
-        <div class="row">
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-        </div>
-        <div class="row">
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-          <div class="letter"></div>
-        </div>
-      </div>
-      <div id="keyboard">
-        <div class="keyRow">
-          <button type="button" aria-label="Q voor Quinten">Q</button>
-          <button type="button" aria-label="W voor Willem">W</button>
-          <button type="button" aria-label="E voor Eduard">E</button>
-          <button type="button" aria-label="R voor Richard">R</button>
-          <button type="button" aria-label="T voor Theodor">T</button>
-          <button type="button" aria-label="Ypsilon">Y</button>
-          <button type="button" aria-label="U voor Utrecht">U</button>
-          <button type="button" aria-label="I voor Izaak">I</button>
-          <button type="button" aria-label="O voor Otto">O</button>
-          <button type="button" aria-label="P voor Pieter">P</button>
-        </div><div class="keyRow">
-          <button type="button" aria-label="A voor Anna">A</button>
-          <button type="button" aria-label="S voor Simon">S</button>
-          <button type="button" aria-label="D voor Dirk">D</button>
-          <button type="button" aria-label="F voor Ferdinand">F</button>
-          <button type="button" aria-label="G voor Gerard">G</button>
-          <button type="button" aria-label="H voor Hendrik">H</button>
-          <button type="button" aria-label="J voor Johan">J</button>
-          <button type="button" aria-label="K voor Karel">K</button>
-          <button type="button" aria-label="L voor Lodewĳk">L</button>
-          <button type="button" aria-label="Ĳ voor Ĳmuiden">Ĳ</button>
-        </div><div class="keyRow">
-          <button type="button" aria-label="Één letter verwĳderen">⌫</button>
-          <button type="button" aria-label="Z voor Zaandam">Z</button>
-          <button type="button" aria-label="X voor Xanthippe">X</button>
-          <button type="button" aria-label="C voor Cornelis">C</button>
-          <button type="button" aria-label="V voor Victor">V</button>
-          <button type="button" aria-label="B voor Bernard">B</button>
-          <button type="button" aria-label="N voor Nico">N</button>
-          <button type="button" aria-label="M voor Maria">M</button>
-          <button type="button" aria-label="Het woord raden">✔</button>
+<head>
+  <meta charset="UTF-8" />
+  <script type="module" src="./js/main.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/style.css" />
+
+  <title>WOORDEL – een dagelĳks woordspelletje (met de lange Ĳ)</title>
+  <meta name="description" content="Zes beurten om het woord te gokken. Elke dag een nieuwe puzzel.">
+</head>
+
+<body>
+  <noscript
+    style="display:flex;flex-direction:column;width:100vw;height:100svh;justify-content:center;align-items:center;">
+    <div class="row">
+      <div class="letter hit">S</div>
+      <div class="letter graze">O</div>
+      <div class="letter miss">R</div>
+      <div class="letter miss">R</div>
+      <div class="letter miss">Y</div>
+    </div>
+    <div style="max-width:25rem;">
+      Deze pagina werkt alleen met Javascript ingeschakeld.
+    </div>
+  </noscript>
+  <dialog id="instructions">
+    <h3>
+      <span class="inlineTile">I</span><span class="inlineTile">N</span><span class="inlineTile">S</span><span
+        class="inlineTile">T</span><span class="inlineTile">R</span><span class="inlineTile">U</span><span
+        class="inlineTile">C</span><span class="inlineTile">T</span><span class="inlineTile">I</span><span
+        class="inlineTile">E</span><span class="inlineTile">S</span>
+    </h3>
+    <p>Raad het 5-letter <b>Woordel</b> in 6 keer.</p>
+    <p>Na elke gok zullen de kleuren van de vakjes aangeven hoe dichtbĳ je was.</p>
+    <hr>
+    <p>Stel bĳvorbeeld, dat je raadt dat het Woordel <span class="dontBreakWord">“<span class="inlineTile">K</span><span
+          class="inlineTile">Ĳ</span><span class="inlineTile">K</span><span class="inlineTile">E</span><span
+          class="inlineTile">N</span>”</span> is.</p>
+    <div class="row">
+      <div class="letter hit">K</div>
+      <div class="letter graze">Ĳ</div>
+      <div class="letter miss">K</div>
+      <div class="letter miss">E</div>
+      <div class="letter hit">N</div>
+    </div>
+    <p>Wat kun je hieruit afleiden?</p>
+    <br>
+    <p>De eerste letter, <span class="inlineTile">K</span>, is groen, wat betekent dat <b>de eerste letter van het
+        Woordel <span class="inlineTile">K</span> is</b>. Hetzelfde geldt voor de laatste letter, <span
+        class="inlineTile">N</span>, die aangeeft dat de laatste letter van het Woordel <span
+        class="inlineTile">N</span> is.</p>
+    <p>De tweede <span class="inlineTile">K</span> en de <span class="inlineTile">E</span> zĳn grĳs. Dit betekent dat
+      <b>het Woordel nergens een tweede <span class="inlineTile">K</span> of een <span class="inlineTile">E</span>
+        bevat.</b></p>
+    <p>De tweede letter <span class="inlineTile">Ĳ</span> is geel, wat betekent dat <b>het Woordel een <span
+          class="inlineTile">Ĳ</span> bevat, maar niet als tweede letter</b>.</p>
+    <br>
+    <p>In dit voorbeeld was het juiste Woordel <span class="dontBreakWord">“<span class="inlineTile">K</span><span
+          class="inlineTile">O</span><span class="inlineTile">N</span><span class="inlineTile">Ĳ</span><span
+          class="inlineTile">N</span>”!</span></p>
+    <div class="row">
+      <div class="letter hit">K</div>
+      <div class="letter hit">O</div>
+      <div class="letter hit">N</div>
+      <div class="letter hit">Ĳ</div>
+      <div class="letter hit">N</div>
+    </div>
+    <hr>
+    <form method="dialog">
+      <button>sluiten</button>
+    </form>
+  </dialog>
+  <dialog id="settings">
+    <h3>
+      <span class="inlineTile">O</span><span class="inlineTile">P</span><span class="inlineTile">T</span><span
+        class="inlineTile">I</span><span class="inlineTile">E</span><span class="inlineTile">S</span>
+    </h3>
+    <p>Niets is nog te veranderen...</p>
+    <hr>
+    <h3>
+      <span class="inlineTile">C</span><span class="inlineTile">R</span><span class="inlineTile">E</span><span
+        class="inlineTile">D</span><span class="inlineTile">I</span><span class="inlineTile">T</span><span
+        class="inlineTile">S</span>
+    </h3>
+    <ul>
+      <li>gecodeerd voor <a href="https://2gd4.me">Haley Halcyon</a> (<a
+          href="https://github.com/HaleyHalcyon/woordel">de broncode zien</a>)</li>
+      <li>het originele spel “Wordle” door Josh Wardle</li>
+      <li>Nederlandse bewerking gebaseerd op het tv-programma “Lingo”</li>
+      <li>woordenlĳst van OpenTaal</li>
+    </ul>
+    <hr>
+    <form method="dialog">
+      <button>sluiten</button>
+    </form>
+  </dialog>
+  <dialog id="gameOver">
+    <h3>
+      Het Woordel van vandaag was <span class="inlineTile"></span><span class="inlineTile"></span><span
+      class="inlineTile"></span><span class="inlineTile"></span><span class="inlineTile"></span>
+    </h3>
+    <p>Gameplay-statistieken zĳn binnenkort beschikbaar...</p>
+    <table id="playStats">
+      <thead>
+        <tr>
+          <th colspan="4">Statistiek</th>
+        </tr>
+      </thead>
+      <tr>
+        <th>0×</th>
+        <th>100%</th>
+        <th>0</th>
+        <th>0</th>
+      </tr>
+      <tr>
+        <td>gespeeld</td>
+        <td>gewinnt</td>
+        <td>zeges op rĳ</td>
+        <td>langste reeks</td>
+      </tr>
+    </table>
+    <hr>
+    <div id="scoreBar">
+      <div class="header">Verdeling</div>
+      <div>
+        <b>1</b>
+        <div class="barBG">
+          <div class="barFG"></div>
+          <div class="barSpacer"></div>
         </div>
       </div>
-      <div id="footer">
-        <p><span aria-label="liefdevol">♥-vol</span> gecodeerd door <a href="https://2gd4.me">Haley Halcyon</a> als <a href="https://github.com/HaleyHalcyon/woordel">vrĳe open&shy;source&shy;software</a></p>
+      <div>
+        <b>2</b>
+        <div class="barBG">
+          <div class="barFG"></div>
+          <div class="barSpacer"></div>
+        </div>
+      </div>
+      <div>
+        <b>3</b>
+        <div class="barBG">
+          <div class="barFG"></div>
+          <div class="barSpacer"></div>
+        </div>
+      </div>
+      <div>
+        <b>4</b>
+        <div class="barBG">
+          <div class="barFG"></div>
+          <div class="barSpacer"></div>
+        </div>
+      </div>
+      <div>
+        <b>5</b>
+        <div class="barBG">
+          <div class="barFG"></div>
+          <div class="barSpacer"></div>
+        </div>
+      </div>
+      <div>
+        <b>6</b>
+        <div class="barBG">
+          <div class="barFG"></div>
+          <div class="barSpacer"></div>
+        </div>
+      </div>
+      <div>
+        <b>×</b>
+        <div class="barBG">
+          <div class="barFG"></div>
+          <div class="barSpacer"></div>
+        </div>
       </div>
     </div>
-  </body>
+    <hr>
+    <div class="cols">
+      <textarea readonly></textarea>
+      <div>
+        <button id="btnShare" type="button">Delen</button>
+        <span id="nextWordle">Volgende Woordle: 00:00:00</span>
+      </div>
+    </div>
+    <hr>
+    <form method="dialog">
+      <button>sluiten</button>
+    </form>
+  </dialog>
+  <div id="game" style="display: none;">
+    <div id="toolbar">
+      <button type="button" id="btnInstructions" aria-label="Hoe speel je dit spel?">?</button>
+      <div id="title">
+        <span class="dontBreakWord"><span class="inlineTile">W</span><span class="inlineTile">E</span><span
+            class="inlineTile">L</span><span class="inlineTile">K</span><span class="inlineTile">O</span><span
+            class="inlineTile">M</span></span>
+        <span class="dontBreakWord"><span class="inlineTile">B</span><span class="inlineTile">Ĳ</span></span>
+        <span class="dontBreakWord"><span class="inlineTile">W</span><span class="inlineTile">O</span><span
+            class="inlineTile">O</span><span class="inlineTile">R</span><span class="inlineTile">D</span><span
+            class="inlineTile">E</span><span class="inlineTile">L</span></span>
+      </div>
+      <button type="button" id="btnSettings" aria-label="Opties">…</button>
+    </div>
+    <div id="board">
+      <div class="row">
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+      </div>
+      <div class="row">
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+      </div>
+      <div class="row">
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+      </div>
+      <div class="row">
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+      </div>
+      <div class="row">
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+      </div>
+      <div class="row">
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+        <div class="letter"></div>
+      </div>
+    </div>
+    <div id="keyboard">
+      <div class="keyRow">
+        <button type="button" aria-label="Q voor Quinten">Q</button>
+        <button type="button" aria-label="W voor Willem">W</button>
+        <button type="button" aria-label="E voor Eduard">E</button>
+        <button type="button" aria-label="R voor Richard">R</button>
+        <button type="button" aria-label="T voor Theodor">T</button>
+        <button type="button" aria-label="Ypsilon">Y</button>
+        <button type="button" aria-label="U voor Utrecht">U</button>
+        <button type="button" aria-label="I voor Izaak">I</button>
+        <button type="button" aria-label="O voor Otto">O</button>
+        <button type="button" aria-label="P voor Pieter">P</button>
+      </div>
+      <div class="keyRow">
+        <button type="button" aria-label="A voor Anna">A</button>
+        <button type="button" aria-label="S voor Simon">S</button>
+        <button type="button" aria-label="D voor Dirk">D</button>
+        <button type="button" aria-label="F voor Ferdinand">F</button>
+        <button type="button" aria-label="G voor Gerard">G</button>
+        <button type="button" aria-label="H voor Hendrik">H</button>
+        <button type="button" aria-label="J voor Johan">J</button>
+        <button type="button" aria-label="K voor Karel">K</button>
+        <button type="button" aria-label="L voor Lodewĳk">L</button>
+        <button type="button" aria-label="Ĳ voor Ĳmuiden">Ĳ</button>
+      </div>
+      <div class="keyRow">
+        <button type="button" aria-label="Één letter verwĳderen">⌫</button>
+        <button type="button" aria-label="Z voor Zaandam">Z</button>
+        <button type="button" aria-label="X voor Xanthippe">X</button>
+        <button type="button" aria-label="C voor Cornelis">C</button>
+        <button type="button" aria-label="V voor Victor">V</button>
+        <button type="button" aria-label="B voor Bernard">B</button>
+        <button type="button" aria-label="N voor Nico">N</button>
+        <button type="button" aria-label="M voor Maria">M</button>
+        <button type="button" aria-label="Het woord raden">✔</button>
+      </div>
+    </div>
+    <div id="footer">
+      <p><span aria-label="liefdevol">♥-vol</span> gecodeerd door <a href="https://2gd4.me">Haley Halcyon</a> als <a
+          href="https://github.com/HaleyHalcyon/woordel">vrĳe open&shy;source&shy;software</a></p>
+    </div>
+  </div>
+</body>
+
 </html>

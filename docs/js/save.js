@@ -30,12 +30,12 @@ export function hasPlayedToday() {
 
 export function saveAutosave(secret, usedGuesses) {
   window.localStorage.setItem(PREFIX + "secret", secret);
-  window.localStorage.setItem(PREFIX + "usedGuesses", usedGuesses);
+  window.localStorage.setItem(PREFIX + "usedGuesses", JSON.stringify(usedGuesses));
 }
 
 export function loadAutosave() {
   return {
     secret: window.localStorage.getItem(PREFIX + "secret"),
-    usedGuesses: window.localStorage.getItem(PREFIX + "usedGuesses"),
+    usedGuesses: JSON.parse(window.localStorage.getItem(PREFIX + "usedGuesses", "[]")),
   }
 }
