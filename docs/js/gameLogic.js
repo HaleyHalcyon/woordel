@@ -234,7 +234,7 @@ export class GameState {
   }
 
   exportSharable(dayNumber) {
-    return `Woordle #${dayNumber}: ${
+    return `Woordel #${dayNumber}: ${
       this.secret === this.usedGuesses.at(-1) ? this.usedGuesses.length : "×"
     }/${this.MAX_TURNS}\n${Array.from(this.clues, (row) => {
       return Array.from(row, (clue) => {
