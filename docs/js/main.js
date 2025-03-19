@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // stats
     const stats = save.getStats();
     m.querySelector("#playCount").innerText = `${stats.plays}×`
-    m.querySelector("#winRate").innerText = `${((stats.wins / stats.plays) * 100).toPrecision(3)}`
+    m.querySelector("#winRate").innerText = `${((stats.wins / stats.plays) * 100).toPrecision(3)}%`
     m.querySelector("#streak").innerText = `${stats.streak}`
     m.querySelector("#maxStreak").innerText = `${stats.maxStreak}`
     let maxMeter = stats.guessDist.reduce((acc, now) => Math.max(acc, now), 1);
