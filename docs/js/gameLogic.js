@@ -20,6 +20,7 @@ export class GameState {
     switch (key) {
       case "Backspace":
         this.currentGuess = this.currentGuess.substring(0, this.currentGuess.length - 1);
+        this.updateRow(this.usedGuesses.length);
         return null;
       case "Enter":
         if (this.currentGuess.length !== this.CHAR_COUNT) {
@@ -29,6 +30,8 @@ export class GameState {
         if (result === null) {
           return Error("invalid word");
         }
+        this.updateRow(this.usedGuesses.length - 1);
+        this.updateRow(this.usedGuesses.length);
         return result;
       case ";":
       case ":":
@@ -52,8 +55,8 @@ export class GameState {
   }
 
   updateRow(row) {
+    if (row >= this.MAX_TURNS) return;
     for (let c = 0; c < this.CHAR_COUNT; c++) {
-      console.debug(this.board.children[row]);
       let tile = this.board.children[row].children[c];
       tile.classList.remove("hit", "graze", "miss", "filled");
       if (this.clues.length <= row) {
