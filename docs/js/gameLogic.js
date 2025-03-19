@@ -105,15 +105,16 @@ export class GameState {
       let key = this.kb.querySelector("button[data-key=" + letter + "]");
       switch (this.clues[row].at(c)) {
         case 2:
-          key.classList.remove("graze");
+          key.classList.remove("miss", "graze");
           key.classList.add("hit");
           break;
         case 1:
-          if (key.classList.has("hit")) break;
+          if (key.classList.contains("hit")) break;
+          key.classList.remove("miss");
           key.classList.add("graze");
           break;
         case 0:
-          if (key.classList.has("graze") || key.classList.has("hit")) break;
+          if (key.classList.contains("graze") || key.classList.containt("hit")) break;
           key.classList.add("miss");
           break;
         default:
