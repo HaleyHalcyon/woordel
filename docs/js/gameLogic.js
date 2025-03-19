@@ -1,12 +1,12 @@
 import isWordValid from "words";
 
 export class GameState {
+  CHAR_COUNT = 5;
   MAX_TURNS = 7;
   ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZĲ";
-  constructor(boardRef, keyboardRef, secret) {
-    this.secret = secret;
+  constructor(boardRef, keyboardRef) {
     this.usedGuesses = [];
-    this.bestGuess = Array.from(secret, _ => ".");
+    this.bestGuess = Array.from(Array(this.CHAR_COUNT), _ => ".");
     this.lettersGuessed = Object.fromEntries(
       ...Array.from(ALPHABET, v => [v, -1])
     );
@@ -22,7 +22,7 @@ export class GameState {
         this.currentGuess = this.currentGuess.substring(0, this.currentGuess.length - 1);
         return null;
       case "submit":
-        if (this.currentGuess.length !== this.secret.length) {
+        if (this.currentGuess.length !== this.CHAR_COUNT) {
           return Error("not enough letters");
         }
         const result = this.submitGuess();
@@ -32,13 +32,13 @@ export class GameState {
         return result;
       case ";":
       case ":":
-        if (this.currentGuess.length < this.secret.length) {
+        if (this.currentGuess.length < this.CHAR_COUNT) {
           this.currentGuess = this.currentGuess + "Ĳ";
           return null;
         }
         return Error("too many letters");
       default:
-        if (this.currentGuess.length < this.secret.length) {
+        if (this.currentGuess.length < this.CHAR_COUNT) {
           key = key.toUpperCase();
           if (this.ALPHABET.contains(key)) {
             this.currentGuess = this.currentGuess + "Ĳ";
@@ -51,7 +51,7 @@ export class GameState {
   }
 
   updateRow(row) {
-    for (let c = 0; c < this.secret.size; c++) {
+    for (let c = 0; c < this.CHAR_COUNT; c++) {
       let tile = this.board.children[row].children[c];
       tile.classList.remove("hit", "graze", "miss");
       if (this.clues.length <= row) {
@@ -69,6 +69,19 @@ export class GameState {
         );
       }
     }
+  }
+
+  loadAutoSave(autosave) {
+    this.secret = autosave.secret;
+    this.usedGuesses = autosave.usedGuesses;
+    this.clues = Array.from(usedGuesses, guess => this.generateClues(guess));
+    // [TODO] this.bestGuess = 
+    // [TODO] this.lettersGuessed = 
+    this.currentGuess = "";
+    for (let i = 0; i < this.MAX_TURNS; i++) {
+      this.updateRow(row);
+    }
+    // [TODO] re-show endgame popup if game is over
   }
 
   submitGuess() {
