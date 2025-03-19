@@ -101,9 +101,9 @@ export class GameState {
       let tile = this.board.children[row].children[c];
       tile.classList.remove("filled");
       tile.classList.add(["miss", "graze", "hit"][this.clues[row].at(c)]);
-      let letter = this.usedGuesses.at(-1).at(c);
+      let letter = this.usedGuesses.at(row).at(c);
       let key = this.kb.querySelector("button[data-key=" + letter + "]");
-      switch (this.lettersGuessed[letter]) {
+      switch (this.clues[row].at(c)) {
         case 2:
           key.classList.remove("graze");
           key.classList.add("hit");
@@ -113,6 +113,7 @@ export class GameState {
           key.classList.add("graze");
           break;
         case 0:
+          if (key.classList.has("graze") || key.classList.has("hit")) break;
           key.classList.add("miss");
           break;
         default:
