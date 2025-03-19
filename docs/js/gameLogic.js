@@ -80,7 +80,7 @@ export class GameState {
     // [TODO] this.lettersGuessed = 
     this.currentGuess = "";
     for (let i = 0; i < this.MAX_TURNS; i++) {
-      this.updateRow(row);
+      this.updateRow(i);
     }
     // [TODO] re-show endgame popup if game is over
   }
