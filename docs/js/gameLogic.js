@@ -3,23 +3,81 @@ import isWordValid from "words";
 export class GameState {
   MAX_TURNS = 7;
   ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZĲ";
-  constructor(secret) {
+  constructor(boardRef, keyboardRef, secret) {
     this.secret = secret;
     this.usedGuesses = [];
     this.bestGuess = Array.from(secret, _ => ".");
     this.lettersGuessed = Object.fromEntries(
       ...Array.from(ALPHABET, v => [v, -1])
     );
+    this.clues = [];
+    this.board = boardRef;
+    this.kb = keyboardRef;
+    this.currentGuess = "";
   }
 
-  submitGuess(guessWord) {
-    if (!isWordValid(guessWord)) {
+  hitKey(key) {
+    switch (key) {
+      case "delete":
+        this.currentGuess = this.currentGuess.substring(0, this.currentGuess.length - 1);
+        return null;
+      case "submit":
+        if (this.currentGuess.length !== this.secret.length) {
+          return Error("not enough letters");
+        }
+        const result = this.submitGuess();
+        if (result === null) {
+          return Error("invalid word");
+        }
+        return result;
+      case ";":
+      case ":":
+        if (this.currentGuess.length < this.secret.length) {
+          this.currentGuess = this.currentGuess + "Ĳ";
+          return null;
+        }
+        return Error("too many letters");
+      default:
+        if (this.currentGuess.length < this.secret.length) {
+          key = key.toUpperCase();
+          if (this.ALPHABET.contains(key)) {
+            this.currentGuess = this.currentGuess + "Ĳ";
+            return null;
+          }
+          return Error("not in alphabet");
+        }
+        return Error("too many letters");
+    }
+  }
+
+  updateRow(row) {
+    for (let c = 0; c < this.secret.size; c++) {
+      let tile = this.board.children[row].children[c];
+      tile.classList.remove("hit", "graze", "miss");
+      if (this.clues.length <= row) {
+        if (this.clues.length === row) {
+          tile.innerText = c < this.currentGuess.length ? this.currentGuess.at(c) : "."
+        } else {
+          tile.innerText = "";
+        }
+      } else {
+        tile.innerText = this.usedGuesses[row].at(c);
+        tile.classList.add(
+          [
+            "miss", "graze", "hit"
+          ][this.clues[row].at(c)]
+        );
+      }
+    }
+  }
+
+  submitGuess() {
+    if (!isWordValid(this.currentGuess)) {
       return null;
     }
-    this.usedGuesses.push(guessWord);
-    let clues = this.generateClues(guessWord);
-    if (guessWord == this.secret) {
-
+    this.usedGuesses.push(this.currentGuess);
+    let clues = this.generateClues(this.currentGuess);
+    if (this.currentGuess == this.secret) {
       return {
         clues,
         win: true,
