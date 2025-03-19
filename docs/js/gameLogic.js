@@ -52,8 +52,8 @@ export class GameState {
   }
 
   updateRow(row) {
-    console.debug(this.board, this.keyboard);
     for (let c = 0; c < this.CHAR_COUNT; c++) {
+      console.debug(this.board.children[row]);
       let tile = this.board.children[row].children[c];
       tile.classList.remove("hit", "graze", "miss");
       if (this.clues.length <= row) {
