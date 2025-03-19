@@ -35,6 +35,12 @@
   ::backdrop {
     --color-bg-transparent: rgba(0,0,0,0.75);
   }
+  a {
+    color: lightskyblue;
+  }
+  a:visited {
+    color: plum;
+  }
 }
 
 body {
@@ -160,7 +166,6 @@ dialog {
   gap: 0.25rem;
   width: 100%;
   max-width: 35rem;
-  padding: 8px;
 }
 
 .keyRow {
@@ -170,6 +175,7 @@ dialog {
   align-items: stretch;
   gap: 0.25rem;
   flex-wrap: wrap;
+  margin: 0 8px;
 }
 
 .keyRow button {
