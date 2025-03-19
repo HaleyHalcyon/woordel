@@ -149,11 +149,9 @@ export class GameState {
       let key = this.kb.querySelector("button[data-key=" + letter + "]");
       switch (this.lettersGuessed[letter]) {
         case 2:
-          key.classList.remove("graze");
           key.classList.add("hit");
           break;
         case 1:
-          if (key.classList.has("hit")) break;
           key.classList.add("graze");
           break;
         case 0:
