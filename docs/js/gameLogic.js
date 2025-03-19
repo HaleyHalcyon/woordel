@@ -55,10 +55,16 @@ export class GameState {
     for (let c = 0; c < this.CHAR_COUNT; c++) {
       console.debug(this.board.children[row]);
       let tile = this.board.children[row].children[c];
-      tile.classList.remove("hit", "graze", "miss");
+      tile.classList.remove("hit", "graze", "miss", "filled");
       if (this.clues.length <= row) {
         if (this.clues.length === row) {
-          tile.innerText = c < this.currentGuess.length ? this.currentGuess.at(c) : "."
+          if (c < this.currentGuess.length) {
+            tile.innerText = this.currentGuess.at(c);
+            tile.classList.add("filled");
+          } else {
+            tile.innerText = this.bestGuess.at(c);
+          }
+          tile.classList.add("filled");
         } else {
           tile.innerText = "";
         }
