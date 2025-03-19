@@ -114,7 +114,7 @@ export class GameState {
           key.classList.add("graze");
           break;
         case 0:
-          if (key.classList.contains("graze") || key.classList.containt("hit")) break;
+          if (key.classList.contains("graze") || key.classList.contains("hit")) break;
           key.classList.add("miss");
           break;
         default:
