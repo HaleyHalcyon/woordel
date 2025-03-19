@@ -1,10 +1,30 @@
 import * as save from "./save.js";
+import {chooseDailyWord} from "./words.js";
+import {GameState} from "./game.js";
 document.addEventListener("DOMContentLoaded", async () => {
   // todo: set everything up
-
+  const gameState = new GameState(
+    document.getElementById("board"),
+    document.getElementById("keyboard"),
+  );
   if (save.firstTime()) {
     document.getElementById("instructions").showModal();
   }
+  if (save.hasPlayedToday()) {
+    gameState.loadAutosave(
+      save.loadAutosave(),
+    );
+  } else {
+    gameState.loadAutosave({
+      secret: chooseDailyWord(),
+      usedGuesses: [],
+    });
+  }
+  document.body.addEventListener("keypress", e => {
+    gameState.hitKey(e.key);
+  });
+
+  
   document.getElementById("btnInstructions").addEventListener(
     "click", () => {
       document.getElementById("instructions").showModal();
