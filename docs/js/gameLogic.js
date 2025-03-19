@@ -2,7 +2,7 @@ import {isWordValid} from "./words.js";
 
 export class GameState {
   CHAR_COUNT = 5;
-  MAX_TURNS = 7;
+  MAX_TURNS = 6;
   ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZĲ";
   constructor(boardRef, keyboardRef) {
     this.usedGuesses = [];
