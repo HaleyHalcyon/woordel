@@ -47,7 +47,7 @@ dialog[open]::backdrop {
   }
 }
 body.hardMode {
-  --color-ui-border: red;
+  --color-ui-border: #d50000;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -191,8 +191,8 @@ dialog[open] {
 }
 
 body.hardMode #toolbar {
-  border-bottom-color: red;
-  color: red;
+  border-bottom-color: var(--color-ui-border);
+  color: var(--color-ui-border);
 }
 
 #toolbar button {
@@ -348,6 +348,7 @@ body.lingo .row > .letter.graze {
   border-color: var(--color-miss);
   color: var(--color-miss);
   box-shadow: 1px 2px 0px var(--color-miss);
+  opacity: 0.5;
 }
 
 p {
