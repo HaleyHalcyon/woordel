@@ -94,6 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
   if (save.firstTime()) {
     document.getElementById("instructions").showModal();
+    document.getElementById("instructions").scrollTo(0, 0);
   }
   // Check if autosave exists, and if so, it's from today
   const secret = chooseDailyWord(dayNumber);
