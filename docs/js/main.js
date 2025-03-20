@@ -137,14 +137,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         save.setOption("lingoColors", value);
       } else if (key === "hardMode") {
         // check if game has started and not ended yet
-        if (gameState.gameIsInProgress()) {
-          event.target.checked = gameState.hardMode;
-        } else {
+        if (gameState.canChangeHardMode()) {
           save.setOption("hardMode", event.target.checked);
           if (!gameState.gameOver) {
             gameState.setHardMode(event.target.checked);
             save.saveAutosave(gameState.exportAutosave());
           }
+        } else {
+          event.target.checked = gameState.hardMode;
         }
         if (event.target.checked) {
           document.body.classList.add("hardMode");
