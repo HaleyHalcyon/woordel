@@ -20,7 +20,7 @@ export function getDaysSinceUnixEpoch() {
 
 export function hasPlayedToday() {
   const lastPlayed = BigInt(window.localStorage.getItem(PREFIX + "dsue") || 0);
-  console.debug("nowString", nowString, "lastPlayed", lastPlayed);
+  console.debug("last played", lastPlayed);
   return nowString === lastPlayed;
 }
 
