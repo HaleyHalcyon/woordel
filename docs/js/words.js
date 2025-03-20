@@ -23,10 +23,10 @@ export function chooseDailyWord(daysSinceUnixEpoch) {
 }
 console.debug(
   "these should be different words:",
-  chooseDailyWord(BigInt(0)),
-  chooseDailyWord(BigInt(1)),
-  chooseDailyWord(BigInt(2)),
-  chooseDailyWord(BigInt(3)),
+  chooseDailyWord(BigInt(20166)),
+  chooseDailyWord(BigInt(20167)),
+  chooseDailyWord(BigInt(20168)),
+  chooseDailyWord(BigInt(20169)),
 );
 export function isWordValid(word){
   return words.includes(word);

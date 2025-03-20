@@ -8,6 +8,8 @@
   --color-bg2: #eee;
   --color-fg: #000;
 
+  --color-ui-border: var(--color-fg);
+
   --tile-size: min(12vw, 4rem);
   
   background: var(--color-bg);
@@ -44,6 +46,9 @@ dialog[open]::backdrop {
     background-color: var(--color-hit);
   }
 }
+body.hardMode {
+  --color-ui-border: red;
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -65,6 +70,22 @@ dialog[open]::backdrop {
   a:visited {
     color: plum;
   }
+  body.hardMode {
+    --color-ui-border: red;
+  }
+}
+
+body.lingo {
+  --color-hit: #cb2828;
+  --color-graze: #f9de13;
+  --color-miss: #253086;
+  --color-empty: #3d425d;
+  --color-filled: #585a77;
+}
+
+hr {
+  border: none;
+  border-bottom: 1px solid var(--color-filled);
 }
 
 body {
@@ -72,10 +93,10 @@ body {
 }
 
 button {
-  background: var(--color-bg);
+  background: var(--color-ui-bg);
   border: 2px solid var(--color-fg);
   border-radius: 6px;
-  color: inherit;
+  color: var(--color-fg);
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -99,6 +120,7 @@ dialog {
   overflow-y: auto;
   opacity: 0;
   transition: opacity 250ms;
+  border: 2px solid var(--color-ui-border);
 }
 
 dialog[open] {
@@ -133,6 +155,7 @@ dialog[open] {
   border: 1px solid var(--color-fg);
   padding: 1rem;
   border-radius: 1rem;
+  max-width: calc(100vw - 4rem);
 }
 
 @keyframes toastKeyframes {
@@ -163,6 +186,12 @@ dialog[open] {
   align-items: center;
   background: var(--color-bg2);
   gap: 4px;
+  border-bottom: 2px solid var(--color-fg);
+}
+
+body.hardMode #toolbar {
+  border-bottom-color: red;
+  color: red;
 }
 
 #toolbar button {
@@ -173,16 +202,29 @@ dialog[open] {
   line-height: 2rem;
 }
 
+body.hardMode #toolbar button,
+body.hardMode #keyboard button[data-key="Enter"],
+body.hardMode #keyboard button[data-key="Backspace"] {
+  background: var(--color-ui-bg);
+  border: 2px solid var(--color-ui-border);
+  color: var(--color-ui-border);
+  box-shadow: 1px 2px 0px var(--color-ui-border);
+}
+
 #title {
   line-height: 1.5;
 }
 
 #board {
+  width: fit-content;
+  align-self: center;
   flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--tile-size) * 0.125);
+  border: 2px solid var(--color-ui-border);
+  gap: calc(var(--tile-size) * 0.0625);
+  padding: calc(var(--tile-size) * 0.125);
 }
 
 .row {
@@ -191,7 +233,7 @@ dialog[open] {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: calc(var(--tile-size) * 0.125);
+  gap: calc(var(--tile-size) * 0.0625);
 }
 
 .row > .letter {
@@ -218,6 +260,14 @@ dialog[open] {
 .row > .letter.graze {
   background-color: var(--color-graze);
   color: var(--color-bg);
+}
+
+body.lingo .row > .letter.graze {
+  background: radial-gradient(
+    circle,
+    var(--color-graze) 66%,
+    var(--color-miss) 68%
+  );
 }
 
 .row > .letter.miss {
@@ -271,6 +321,12 @@ dialog[open] {
   height: 2.5rem;
   line-height: 2.5rem;
   font-size: 1.25rem;
+}
+
+.keyRow button.empty {
+  border-color: var(--color-fg);
+  color: var(--color-fg);
+  box-shadow: 1px 2px 0px var(--color-fg);
 }
 
 .keyRow button.hit {
@@ -333,15 +389,20 @@ p {
   font-weight: 700;
 }
 
-#scoreBar div {
+#scoreBar > div {
   display: flex;
   flex-direction: row;
   justify-content: stretch;
   align-items: stretch;
 }
 
-#scoreBar div b {
+#scoreBar > div + div {
+  margin-top: 0.25rem;
+}
+
+#scoreBar > div b {
   flex: 0 0 auto;
+  margin-right: 0.25rem;
 }
 
 
@@ -351,18 +412,21 @@ p {
   flex-direction: row;
   justify-content: stretch;
   align-items: stretch;
+  background: var(--color-filled);
 }
 
 .barFG, .barSpacer {
-  flex: 1 1 0;
+  flex: 1 1 0px;
 }
 
 .barFG {
   background-color: var(--color-hit);
+  color: var(--color-bg);
 }
 
 #scoreBar > :last-child .barFG {
   background-color: var(--color-filled);
+  color: var(--color-bg);
 }
 
 .cols {
@@ -372,4 +436,25 @@ p {
   align-items: stretch;
   height: auto;
   min-height: fit-content;
+  gap: 1rem;
+}
+
+.cols > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: 0.25rem;
+}
+
+.settingsList {
+  padding-inline-start: 2rem;
+  list-style: none;
+}
+
+.settingsList li {
+  text-indent: -2rem;
+}
+
+#settings li + li {
+  padding-block-start: 1rem;
 }

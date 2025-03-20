@@ -5,9 +5,10 @@ let daysSinceUnixEpoch = BigInt(
   Math.floor((now - new Date(0)) / (new Date(1970, 0, 2) - new Date(1970, 0, 1)))
 );
 console.debug("today is ", daysSinceUnixEpoch, " since 1970-01-01");
+let options = null // this will be populated later
 
 export function firstTime() {
-  const lastPlayed = window.localStorage.getItem(PREFIX + "lastPlayed", null);
+  const lastPlayed = window.localStorage.getItem(PREFIX + "dsue");
   if (lastPlayed == null) {
     return true; // we’ll eventually set lastPlayed somewhere else
   }
@@ -21,19 +22,21 @@ export function getDaysSinceUnixEpoch() {
 export function hasPlayedToday() {
   const lastPlayed = BigInt(window.localStorage.getItem(PREFIX + "dsue") || 0);
   console.debug("last played", lastPlayed);
-  return nowString === lastPlayed;
+  return daysSinceUnixEpoch === lastPlayed;
 }
 
-export function saveAutosave(secret, usedGuesses) {
+export function saveAutosave(autosave) {
   window.localStorage.setItem(PREFIX + "dsue", Number(daysSinceUnixEpoch));
-  window.localStorage.setItem(PREFIX + "secret", secret);
-  window.localStorage.setItem(PREFIX + "usedGuesses", JSON.stringify(usedGuesses));
+  window.localStorage.setItem(PREFIX + "secret", autosave.secret);
+  window.localStorage.setItem(PREFIX + "usedGuesses", JSON.stringify(autosave.usedGuesses));
+  window.localStorage.setItem(PREFIX + "hardMode", JSON.stringify(autosave.hardMode));
 }
 
 export function loadAutosave() {
   return {
     secret: window.localStorage.getItem(PREFIX + "secret"),
-    usedGuesses: JSON.parse(window.localStorage.getItem(PREFIX + "usedGuesses", "[]")),
+    usedGuesses: JSON.parse(window.localStorage.getItem(PREFIX + "usedGuesses") || "[]"),
+    hardMode: JSON.parse(window.localStorage.getItem(PREFIX + "hardMode") || false),
   }
 }
 
@@ -73,4 +76,16 @@ export function getStats() {
     maxStreak: parseInt(window.localStorage.getItem(PREFIX + "maxStreak") || "0", 10),
     guessDist: JSON.parse(window.localStorage.getItem(PREFIX + "guessDist") || "[0,0,0,0,0,0,0]"),
   }
+}
+
+export function getOption(key) {
+  if (options === null) {
+    options = JSON.parse(window.localStorage.getItem(PREFIX + "config") || "{}");
+  }
+  return options[key];
+}
+
+export function setOption(key, value) {
+  options[key] = value;
+  return window.localStorage.setItem(PREFIX + "config", JSON.stringify(options));
 }

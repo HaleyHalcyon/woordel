@@ -3,6 +3,11 @@ import { saveAutosave, updateStats } from "./save.js";
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
+// index is 1 off to skip "zeroth"
+const ordinal = (c) => [
+  "eerste", "tweede", "derde", "vierde", "vĳvde"
+][c];
+
 export class GameState {
   CHAR_COUNT = 5;
   MAX_TURNS = 6;
@@ -21,6 +26,14 @@ export class GameState {
     this.gameOver = false;
   }
 
+  setHardMode(isHardMode) {
+    this.hardMode = isHardMode;
+  }
+
+  gameIsInProgress() {
+    return this.usedGuesses.length > 0 && !this.gameOver;
+  }
+
   async hitKey(key) {
     if (this.animating || this.gameOver) return null;
     console.debug(key);
@@ -37,8 +50,8 @@ export class GameState {
           return Error("Het woord moet 5 letters zĳn.");
         }
         const result = await this.submitGuess();
-        if (result === null) {
-          return Error("Dat woord was niet gevonden.");
+        if (result instanceof Error) {
+          return result;
         }
         await this.updateRowWithAnimation(this.usedGuesses.length - 1);
         return result;
@@ -93,7 +106,7 @@ export class GameState {
   // Used to show the results of the last guess.
   async updateRowWithAnimation(row) {
     this.animating = true;
-    saveAutosave(this.secret, this.usedGuesses);
+    saveAutosave(this.exportAutosave());
     if (this.usedGuesses.at(row) === this.secret || this.usedGuesses.length === this.MAX_TURNS) {
       updateStats(this.usedGuesses.at(row) === this.secret, this.usedGuesses.length);
     }
@@ -132,6 +145,7 @@ export class GameState {
 
   loadAutosave(autosave) {
     this.secret = autosave.secret;
+    this.hardMode = autosave.hardMode || false;
     this.usedGuesses = autosave.usedGuesses || [];
     this.clues = Array.from(this.usedGuesses, (guess) =>
       this.generateClues(guess)
@@ -157,6 +171,9 @@ export class GameState {
         case 0:
           key.classList.add("miss");
           break;
+        case -1:
+          key.classList.add("empty");
+          break;
       }
     }
     this.currentGuess = "";
@@ -173,10 +190,58 @@ export class GameState {
 
   async submitGuess() {
     if (!isWordValid(this.currentGuess)) {
-      return null;
+      return Error("Dat woord was niet gevonden.");
+    }
+    if (this.hardMode) {
+      const problems = Array.from(new Array(this.CHAR_COUNT + 1), _ => new Set());
+      // check missing hits, already ruled out grazes, and ignored misses
+      for (let c = 0; c < this.CHAR_COUNT; c++) {
+        const letter = this.currentGuess[c];
+        for (let row = 0; row < this.usedGuesses.length; row++) {
+          const letterGuess = this.usedGuesses[row][c];
+          const letterClue = this.clues[row][c];
+          if (letterClue === 1) {
+            if (letterGuess == letter) {
+              problems[c].add("De letter " + letter + " is niet de " + ordinal(c) + " letter van het Woordel!");
+            }
+          } else if (letterClue === 2 && letterGuess != letter) {
+            problems[c].add("De " + ordinal(c) + " letter van het Woordel is " + letter + "!");
+          }
+        }
+      }
+      // check unused grazes and ignored misses
+      for (let letter of this.ALPHABET) {
+        const v = this.lettersGuessed[letter];
+        console.log(letter, v)
+        if (v === 0 && this.currentGuess.includes(letter)) {
+          problems.at(-1).add("De letter " + letter + " zit niet in het Woordel!");
+          continue;
+        }
+        if (v === 1 && !this.currentGuess.includes(letter)) {
+          problems.at(-1).add("De letter " + letter + " moet zitten in het Woordel!")
+          continue;
+        }
+      }
+      if (problems.some(v => v.size !== 0)) {
+        let problemsList = Array.from(problems, v => Array.from(v));
+        let problemsList_1 = problemsList.filter(v => v.length > 0);
+        let problemsList_2 = Array.from(problemsList_1, v => {
+          return v.toSorted();
+        }).flat();
+        if (problemsList_2.length === 1) {
+          return Error(problemsList_2[0]);
+        }
+        return Error(
+          "* " + problemsList_2.join("\n* ")
+        );
+      }
     }
     this.usedGuesses.push(this.currentGuess);
     let clues = this.generateClues(this.currentGuess);
+    for (let i = 0; i < clues.length; i++) {
+      let l = this.usedGuesses.at(-1)[i];
+      this.lettersGuessed[l] = Math.max(clues, this.lettersGuessed[l]);
+    }
     this.clues.push(clues);
     if (this.currentGuess == this.secret) {
       this.gameOver = true;
@@ -230,16 +295,25 @@ export class GameState {
     return {
       secret: this.secret,
       usedGuesses: this.usedGuesses,
+      hardMode: this.hardMode,
     };
   }
 
   exportSharable(dayNumber) {
-    return `Woordel #${dayNumber}: ${
+    return `Woordel #${
+      dayNumber
+    }: ${
       this.secret === this.usedGuesses.at(-1) ? this.usedGuesses.length : "×"
-    }/${this.MAX_TURNS}\n${Array.from(this.clues, (row) => {
-      return Array.from(row, (clue) => {
-        return ["⬛", "🟨", "🟩",][clue];
-      }).join("");
-    }).join("\n")}`;
+    }/${
+      this.MAX_TURNS
+    }${
+      this.hardMode ? "*" : ""
+    }\n${
+      Array.from(this.clues, (row) => {
+        return Array.from(row, (clue) => {
+          return ["⬛", "🟨", "🟩",][clue];
+        }).join("");
+      }).join("\n")
+    }`;
   }
 }
