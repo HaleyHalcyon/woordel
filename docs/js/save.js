@@ -4,6 +4,7 @@ let now = new Date();
 let daysSinceUnixEpoch = BigInt(
   Math.floor((now - new Date(0)) / (new Date(1970, 0, 2) - new Date(1970, 0, 1)))
 );
+console.debug("today is ", daysSinceUnixEpoch, " since 1970-01-01");
 
 export function firstTime() {
   const lastPlayed = window.localStorage.getItem(PREFIX + "lastPlayed", null);
@@ -18,17 +19,13 @@ export function getDaysSinceUnixEpoch() {
 }
 
 export function hasPlayedToday() {
-  const nowString = `${now.getFullYear()}${("0" + now.getMonth() + 1).slice(-2)}${("0" + now.getDate()).slice(-2)}`;
-  const lastPlayed = window.localStorage.getItem(PREFIX + "lastPlayed") || "00000000";
+  const lastPlayed = BigInt(window.localStorage.getItem(PREFIX + "dsue") || 0);
   console.debug("nowString", nowString, "lastPlayed", lastPlayed);
-  if (nowString !== lastPlayed) {
-    window.localStorage.setItem(PREFIX + "lastPlayed", nowString);
-    return false;
-  }
-  return true;
+  return nowString === lastPlayed;
 }
 
 export function saveAutosave(secret, usedGuesses) {
+  window.localStorage.setItem(PREFIX + "dsue", Number(daysSinceUnixEpoch));
   window.localStorage.setItem(PREFIX + "secret", secret);
   window.localStorage.setItem(PREFIX + "usedGuesses", JSON.stringify(usedGuesses));
 }
