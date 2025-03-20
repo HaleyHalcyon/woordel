@@ -21,6 +21,13 @@ export function chooseDailyWord(daysSinceUnixEpoch) {
     triple32(daysSinceUnixEpoch) % BigInt(solutions.length)
   )];
 }
+console.debug(
+  "these should be different words:",
+  chooseDailyWord(BigInt(0)),
+  chooseDailyWord(BigInt(1)),
+  chooseDailyWord(BigInt(2)),
+  chooseDailyWord(BigInt(3)),
+);
 export function isWordValid(word){
   return words.includes(word);
 }
