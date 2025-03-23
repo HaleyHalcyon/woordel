@@ -30,8 +30,8 @@ export class GameState {
     this.hardMode = isHardMode;
   }
 
-  gameIsInProgress() {
-    return this.usedGuesses.length > 0 && !this.gameOver;
+  canChangeHardMode() {
+    return this.usedGuesses.length <= 1 || this.gameOver;
   }
 
   async hitKey(key) {
