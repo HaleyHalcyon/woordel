@@ -30,20 +30,23 @@ dialog[open]::backdrop {
 @keyframes correctWord {
   from {
     transform: rotate(0deg);
-    background-color: var(--color-hit);
+    filter: hue(-360deg);
   }
-  25% {
-    background-color: cyan;
+  16.7% {
+    filter: saturate(200%) hue(-300deg);
   }
-  50% {
-    background-color: magenta;
+  33.3% {
+    filter: saturate(200%) hue(-240deg);
   }
-  75% {
-    background-color: yellow;
+  66.7% {
+    filter: saturate(200%) hue(-120deg);
+  }
+  83.3% {
+    filter: saturate(200%) hue(-60deg);
   }
   to {
     transform: rotate(360deg);
-    background-color: var(--color-hit);
+    filter: hue(0deg);
   }
 }
 body.hardMode {
