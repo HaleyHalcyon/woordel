@@ -4,11 +4,13 @@ This is a clone of the Web word game Wordle for the Dutch language using nothing
 
 # Why?
 
-This was inspired by my spite at how I could not find a version of Wordle in Dutch that considers “Ĳ” to be one letter, as it is treated in capitalization (e.g. “Ĳsbeer”, not “Ijsbeer”) and in crossword puzzles.
+This was inspired by my spite at how I could not find a version of Wordle in Dutch that considers “Ĳ” to be one letter, as it is treated in capitalization—e.g. the place name “Ĳsselmeer”, not “Ijsselmeer”—and in crossword puzzles—e.g. *(6) grootste vleeseter op land* → *Ĳ-S-B-E-E-R*.
 
-For English speakers, “ĳ” often appears:
-* where a “long I” sound does in English (**i**ce bear ↔ ***ĳ**sbeer*, Fr**i**day ↔ *vr**ĳ**dag*)
-* where a “Y ending” does in English (lotter**y** ↔ *loter**ĳ***)
+(As a side note, you may recognize that last example as looking like “greatest flesheater up land → icebear”. You’re right, it means “largest carnivore on land → polar bear”.)
+
+For English speakers, “ĳ” sounds somewhere between an English “long I” and “long A” depending on the speaker. It often appears:
+* where a “long I” sound would in English (b**y** ↔ *b**ij***, f**i**ve ↔ *v**ĳ**f*, Fr**i**day ↔ *vr**ĳ**dag*)
+* where a “Y ending” would in English (lotter**y** ↔ *loter**ĳ***, batter**y** ↔ *batter**ĳ***)
 * in the *-lĳk* adjective or adverb ending, cognate to English *-ly* (man**ly** ↔ *manne**lĳk***), but used more often (royal ↔ *konink**lĳk***—cognate to “kingly”)
 
 # Licence
