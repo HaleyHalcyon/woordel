@@ -6,7 +6,7 @@ This is a clone of the Web word game Wordle for the Dutch language using nothing
 
 This was inspired by my spite at how I could not find a version of Wordle in Dutch that considers “Ĳ” to be one letter, as it is treated in capitalization (e.g. “Ĳsbeer”, not “Ijsbeer”) and in crossword puzzles.
 
-For English speakers, “ĳ” often corresponds to a “long I” sound in English (**i**ce bear ↔ ***ĳ**sbeer*), or a “Y ending” in English (lotter**y** ↔ *loter**ĳ***).
+For English speakers, “ĳ” often corresponds to a “long I” sound in English (**i**ce bear ↔ ***ĳ**sbeer*, Fr**i**day ↔ *vr**ĳ**dag*), or a “Y ending” in English (lotter**y** ↔ *loter**ĳ***).
 
 # Licence
 
