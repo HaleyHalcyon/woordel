@@ -30,23 +30,23 @@ dialog[open]::backdrop {
 @keyframes correctWord {
   from {
     transform: rotate(0deg);
-    filter: hue(-360deg);
+    filter: hue-rotate(-360deg);
   }
   16.7% {
-    filter: saturate(200%) hue(-300deg);
+    filter: saturate(200%) hue-rotate(-300deg);
   }
   33.3% {
-    filter: saturate(200%) hue(-240deg);
+    filter: saturate(200%) hue-rotate(-240deg);
   }
   66.7% {
-    filter: saturate(200%) hue(-120deg);
+    filter: saturate(200%) hue-rotate(-120deg);
   }
   83.3% {
-    filter: saturate(200%) hue(-60deg);
+    filter: saturate(200%) hue-rotate(-60deg);
   }
   to {
     transform: rotate(360deg);
-    filter: hue(0deg);
+    filter: hue-rotate(0deg);
   }
 }
 body.hardMode {
@@ -247,23 +247,23 @@ body.hardMode #keyboard button[data-key="Backspace"] {
   line-height: var(--tile-size);
   font-size: calc(var(--tile-size) * 0.6);
   background-color: var(--color-empty);
-  color: var(--color-bg);
+  color: rgba(255, 255, 255, 0.3);
   font-weight: 700;
 }
 
 .row > .letter.filled {
   background-color: var(--color-filled);
-  color: var(--color-fg);
+  color: white;
 }
 
 .row > .letter.hit {
   background-color: var(--color-hit);
-  color: var(--color-bg);
+  color: white;
 }
 
 .row > .letter.graze {
   background-color: var(--color-graze);
-  color: var(--color-bg);
+  color: white;
 }
 
 body.lingo .row > .letter.graze {
@@ -276,7 +276,7 @@ body.lingo .row > .letter.graze {
 
 .row > .letter.miss {
   background-color: var(--color-miss);
-  color: var(--color-bg);
+  color: white;
 }
 
 .row.answer > .letter {
