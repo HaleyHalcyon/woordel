@@ -417,7 +417,7 @@ p {
   flex-direction: row;
   justify-content: stretch;
   align-items: stretch;
-  background: var(--color-filled);
+  background: var(--color-bg);
 }
 
 .barFG, .barSpacer {
@@ -425,13 +425,13 @@ p {
 }
 
 .barFG {
-  background-color: var(--color-hit);
+  background-color: var(--color-fg);
   color: var(--color-bg);
 }
 
 #scoreBar > :last-child .barFG {
-  background-color: var(--color-filled);
-  color: var(--color-bg);
+  background-color: var(--color-miss);
+  color: white;
 }
 
 .cols {
