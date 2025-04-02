@@ -272,6 +272,7 @@ body.lingo .row > .letter.graze {
     var(--color-graze) 66%,
     var(--color-miss) 68%
   );
+  color: black;
 }
 
 .row > .letter.miss {

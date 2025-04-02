@@ -205,7 +205,7 @@ export class GameState {
               problems[c].add("De letter " + letter + " is niet de " + ordinal(c) + " letter van het Woordel!");
             }
           } else if (letterClue === 2 && letterGuess != letter) {
-            problems[c].add("De " + ordinal(c) + " letter van het Woordel is " + letter + "!");
+            problems[c].add("De " + ordinal(c) + " letter van het Woordel is " + letterGuess + "!");
           }
         }
       }
@@ -299,7 +299,7 @@ export class GameState {
     };
   }
 
-  exportSharable(dayNumber) {
+  exportSharable(dayNumber, isLingoTheme) {
     return `Woordel #${
       dayNumber
     }: ${
@@ -311,7 +311,11 @@ export class GameState {
     }\n${
       Array.from(this.clues, (row) => {
         return Array.from(row, (clue) => {
-          return ["⬛", "🟨", "🟩",][clue];
+          return (
+            isLingoTheme ?
+            ["🟦", "🟡", "🟥"] :
+            ["⬛", "🟨", "🟩"]
+          )[clue];
         }).join("");
       }).join("\n")
     }`;
