@@ -20,7 +20,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     m.querySelectorAll("h3 .inlineTile").forEach((v, k) => {
       v.innerText = gameState.secret.at(k);
     });
-    const sharable = gameState.exportSharable(dayNumber - dayZero) + "\n" + window.location;
+    const sharable = gameState.exportSharable(
+      dayNumber - dayZero, document.body.classList.contains("lingo")
+    ) + "\n" + window.location;
     console.log(sharable);
     m.querySelector("textarea").value = sharable;
     m.querySelector("#btnShare").addEventListener("click", async () => {
@@ -96,25 +98,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("instructions").showModal();
     document.getElementById("instructions").scrollTo(0, 0);
   }
-  // Check if autosave exists, and if so, it's from today
-  const secret = chooseDailyWord(dayNumber);
-  const lastAutosave = save.loadAutosave();
-  if (lastAutosave.secret === secret) {
-    console.log("autosave exists");
-    const loadedResult = gameState.loadAutosave(lastAutosave);
-    if (loadedResult.win || loadedResult.lose) {
-      showGameOver(loadedResult);
-    }
-  } else {
-    console.log("new word");
-    save.saveAutosave({
-      secret: secret,
-      usedGuesses: [],
-      hardMode: save.getOption("hardMode") || false,
-    });
-    gameState.loadAutosave(save.loadAutosave());
-  }
-
   // Load settings
   for (let key of ["lingoColors", "hardMode"]) {
     const el = document.getElementById(key);
@@ -154,6 +137,25 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
   }
+  // Check if autosave exists, and if so, it's from today
+  const secret = chooseDailyWord(dayNumber);
+  const lastAutosave = save.loadAutosave();
+  if (lastAutosave.secret === secret) {
+    console.log("autosave exists");
+    const loadedResult = gameState.loadAutosave(lastAutosave);
+    if (loadedResult.win || loadedResult.lose) {
+      showGameOver(loadedResult);
+    }
+  } else {
+    console.log("new word");
+    save.saveAutosave({
+      secret: secret,
+      usedGuesses: [],
+      hardMode: save.getOption("hardMode") || false,
+    });
+    gameState.loadAutosave(save.loadAutosave());
+  }
+
 
   document.body.addEventListener("keydown", async e => {
     afterHitKey(await gameState.hitKey(e.key));
